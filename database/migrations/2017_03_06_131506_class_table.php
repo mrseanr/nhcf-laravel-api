@@ -13,16 +13,18 @@ class ClassTable extends Migration
      */
     public function up()
     {
-        Schema::create('classes', function (Blueprint $table) {
-            $table->increments('class_id');
-            $table->int('church_id');
-            $table->int('teacher_id');
-            $table->int('class_type_id');
-            $table->boolean('active');
-            $table->string('class_name');
-            $table->string('notes');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('classes')) {
+          Schema::create('classes', function (Blueprint $table) {
+              $table->increments('class_id');
+              $table->integer('church_id');
+              $table->integer('teacher_id');
+              $table->integer('class_type_id');
+              $table->boolean('active');
+              $table->string('class_name');
+              $table->string('notes');
+              $table->timestamps();
+          });
+        }
     }
 
     /**

@@ -13,16 +13,18 @@ class AddressTable extends Migration
      */
     public function up()
     {
-        Schema::create('address', function (Blueprint $table) {
-            $table->increments('address_id');
-            $table->string('address_line_1');
-            $table->string('address_line_2');
-            $table->string('city');
-            $table->string('state');
-            $table->string('zip');
-            $table->string('notes');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('address')) {
+          Schema::create('address', function (Blueprint $table) {
+              $table->increments('address_id');
+              $table->string('address_line_1');
+              $table->string('address_line_2');
+              $table->string('city');
+              $table->char('state', 2);
+              $table->integer('zip');
+              $table->string('notes');
+              $table->timestamps();
+          });
+        }
     }
 
     /**

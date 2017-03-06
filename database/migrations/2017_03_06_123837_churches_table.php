@@ -13,13 +13,15 @@ class ChurchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('churches', function (Blueprint $table) {
-            $table->increments('church_id');
-            $table->string('church_name');
-            $table->int('address_id');
-            $table->string('notes');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('churches')) {
+          Schema::create('churches', function (Blueprint $table) {
+              $table->increments('church_id');
+              $table->string('church_name');
+              $table->integer('address_id');
+              $table->string('notes');
+              $table->timestamps();
+          });
+        }
     }
 
     /**

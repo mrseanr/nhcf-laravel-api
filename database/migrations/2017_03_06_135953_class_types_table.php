@@ -13,14 +13,16 @@ class ClassTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('class_types', function (Blueprint $table) {
-            $table->increments('class_type_id');
-            $table->string('name');
-            $table->string('description');
-            $table->string('notes');
-            $table->boolean('active');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('class_types')) {
+          Schema::create('class_types', function (Blueprint $table) {
+              $table->increments('class_type_id');
+              $table->string('name');
+              $table->string('description');
+              $table->string('notes');
+              $table->boolean('active');
+              $table->timestamps();
+          });
+        }
     }
 
     /**
