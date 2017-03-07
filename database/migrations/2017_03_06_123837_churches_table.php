@@ -16,9 +16,9 @@ class ChurchesTable extends Migration
         if (!Schema::hasTable('churches')) {
           Schema::create('churches', function (Blueprint $table) {
               $table->increments('church_id');
-              $table->string('church_name');
+              $table->string('church_name')->unique();
               $table->integer('address_id');
-              $table->string('notes');
+              $table->string('notes')->nullable();
               $table->timestamps();
           });
         }
