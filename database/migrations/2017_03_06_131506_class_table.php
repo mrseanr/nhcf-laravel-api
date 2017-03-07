@@ -21,7 +21,7 @@ class ClassTable extends Migration
               $table->integer('class_type_id');
               $table->boolean('active');
               $table->string('class_name');
-              $table->string('notes');
+              $table->string('notes')->nullable();
               $table->timestamps();
           });
         }

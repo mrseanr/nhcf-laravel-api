@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // fix for mysql large field
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(255);
     }
 
     /**

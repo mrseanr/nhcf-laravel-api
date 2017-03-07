@@ -38,12 +38,10 @@ class churchController extends Controller
           $church->save();
           $inserted_id = $church->church_id;
           return response()->json(['status'=>'success','data'=>[$church]]);
-          //return response()->json(['status'=>'success','data'=>['church_id'=>$inserted_id, 'church_name'=>$request->church_name]]);
         } catch (\Illuminate\Database\QueryException $exception) {
-          // You can check get the details of the error using `errorInfo`:
+          // use php errorInfo class to get the exception
           $errorInfo = $exception->errorInfo;
-
-          // Return the response to the client..
+          // return the response to the client
           return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
         }
     }

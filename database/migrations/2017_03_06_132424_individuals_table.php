@@ -26,8 +26,8 @@ class IndividualsTable extends Migration
               $table->string('phone_number');
               $table->date('birthday');
               $table->char('gender', 1);
-              $table->string('known_allergies');
-              $table->string('notes');
+              $table->string('known_allergies')->nullable();
+              $table->string('notes')->nullable;
               $table->timestamps();
           });
         }

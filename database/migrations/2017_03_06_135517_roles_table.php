@@ -18,7 +18,7 @@ class RolesTable extends Migration
               $table->increments('role_id');
               $table->string('name');
               $table->string('description');
-              $table->string('notes');
+              $table->string('notes')->nullable();
               $table->boolean('active');
               $table->timestamps();
           });

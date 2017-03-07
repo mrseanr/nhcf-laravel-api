@@ -17,11 +17,11 @@ class AddressTable extends Migration
           Schema::create('address', function (Blueprint $table) {
               $table->increments('address_id');
               $table->string('address_line_1');
-              $table->string('address_line_2');
+              $table->string('address_line_2')->nullable();
               $table->string('city');
               $table->char('state', 2);
               $table->integer('zip');
-              $table->string('notes');
+              $table->string('notes')->nullable();
               $table->timestamps();
           });
         }

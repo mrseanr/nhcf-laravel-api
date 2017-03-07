@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('church','churchController',['except' => ['create', 'edit']]);
+Route::resource('address','addressController',['except' => ['create', 'edit']]);

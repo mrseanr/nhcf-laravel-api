@@ -18,7 +18,7 @@ class ClassTypesTable extends Migration
               $table->increments('class_type_id');
               $table->string('name');
               $table->string('description');
-              $table->string('notes');
+              $table->string('notes')->nullable();
               $table->boolean('active');
               $table->timestamps();
           });
