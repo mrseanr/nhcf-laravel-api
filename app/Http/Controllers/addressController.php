@@ -15,23 +15,54 @@ class addressController extends Controller
       // sert the required fields
       $required_fields = array('address_line_1','city','state','zip');
       // default the return value to true
-      $return_value = true;
+      $valid_request = true;
+      // setup the missing fields array
+      $missing_fields = array();
+      // setup response if vaild
+      $response = array("result"=>"success");
       // setup an array for the input paramter key names
       $input_keys = array();
       // iterate through the input data and put the key names into a string array
       foreach ($input as $key => $value) {
         //error_log('key: '.$key.' value: '.$value);
         array_push($input_keys, $key);
+        if ($key == 'city' && strlen($value) > 2) {
+          $valid_request = false;
+          $response['city_length_error'] = "City field only allows 2 characters.";
+        }
+        error_log($key."_len: ".strlen((string)$value));
+        if ($key == 'zip' && strlen((string)$value) > 5) {
+          $valid_request = false;
+          $response['zip_length_error'] = "Zip Code field only allows 5 digits.";
+        }
+        if ($key == 'zip' && !is_numeric($value)) {
+          $valid_request = false;
+          $response['zip_numeric_error'] = "Zip Code field must be numeric.";
+        }
       }
       // iteragte through the required fields, check if the input keys are in the required fields
       foreach ($required_fields as $req_field) {
         error_log('field: '.$req_field);
         if(!in_array($req_field,$input_keys)) {
-          $return_value=false;
+          $valid_request=false;
+          array_push($missing_fields,$req_field);
           //error_log('not found: '.$req_field);
         }
       }
-      return $return_value;
+      if (!$valid_request) {
+        // change the result value
+        if (in_array('result', $response))
+        {
+          unset($array[array_search('result',$response)]);
+        }
+        $response['result'] = "error";
+        // add the missing fields
+        if (count($missing_fields) > 0) {
+          $response['missing_field_error'] = "The following fields are required, but not provided: ". implode(",",$missing_fields);
+        }
+      }
+      error_log(implode(",",$response));
+      return $response;
     }
     /**
      * Display a listing of the resource.
@@ -55,9 +86,20 @@ class addressController extends Controller
     {
       error_log('---------');
       $input = $request->all();
-      $valid = $this->validate_input($input);
-      if (!$valid){
-        return response()->json(['status'=>'error','message'=>'Not all required fields were supplied.'],422);
+      $validate_result = $this->validate_input($input);
+      if (!array_search('result',$validate_result)){
+        $messages = array();
+        foreach ($validate_result as $item => $message) {
+          if (strpos($item, '_error') !== false) {
+            error_log("key: ".$message);
+            array_push($messages,$message);
+          }
+          // if ($item == "error_message") {
+          //   error_log("key: ".$message);
+          //   array_push($messages,$message);
+          // }
+        }
+        return response()->json(['status'=>'error','message'=>"There were errors processing this request",'data'=>$messages],422);
       }
 
       // create the new address using the supplied parameters
