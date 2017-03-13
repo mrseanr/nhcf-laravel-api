@@ -60,7 +60,6 @@ class churchController extends Controller
         // return all churches
         $churches = churchModel::all();
         return response()->json(['status'=>'success','data'=>[$churches]]);
-
     }
 
     /**

@@ -149,7 +149,8 @@ class addressController extends Controller
         return response()->json(['status'=>'error','message'=>'No resource found.'],404);
       } catch (\Exception $e) {
         return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
-      }    }
+      }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -224,5 +225,6 @@ class addressController extends Controller
         return response()->json(['status'=>'error','message'=>'No resource found to delete.'],404);
       } catch (\Exception $e) {
         return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
-      }    }
+      }
+    }
 }
