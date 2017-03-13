@@ -20,9 +20,6 @@ class churchController extends Controller
       $response['result'] = "success";
       // setup an array for the input paramter key names
       $input_keys = array();
-
-
-
       // iterate through the input data and put the key names into a string array
       foreach ($input as $key => $value) {
         //error_log('key: '.$key.' value: '.$value);
