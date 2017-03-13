@@ -9,7 +9,6 @@ use Log;
 class addressController extends Controller
 {
 
-
     private function validate_input($input)
     {
       // sert the required fields
@@ -18,31 +17,34 @@ class addressController extends Controller
       $valid_request = true;
       // setup the missing fields array
       $missing_fields = array();
-      // setup response if vaild
-      $response = array("result"=>"success");
+      // setup default response array
+      $response = array();
+      $response['result'] = "success";
       // setup an array for the input paramter key names
       $input_keys = array();
       // iterate through the input data and put the key names into a string array
       foreach ($input as $key => $value) {
         //error_log('key: '.$key.' value: '.$value);
         array_push($input_keys, $key);
-        if ($key == 'city' && strlen($value) > 2) {
+        // check state value is less than 2 characters
+        if ($key == 'state' && strlen($value) > 2) {
           $valid_request = false;
-          $response['city_length_error'] = "City field only allows 2 characters.";
+          $response['city_length_error'] = "The State field only allows 2 characters.";
         }
-        error_log($key."_len: ".strlen((string)$value));
-        if ($key == 'zip' && strlen((string)$value) > 5) {
-          $valid_request = false;
-          $response['zip_length_error'] = "Zip Code field only allows 5 digits.";
-        }
+        // check the zip value is numeric
         if ($key == 'zip' && !is_numeric($value)) {
           $valid_request = false;
-          $response['zip_numeric_error'] = "Zip Code field must be numeric.";
+          $response['zip_numeric_error'] = "The Zip Code field must be numeric.";
+        }
+        // check the zip value is less than 5 characters
+        if ($key == 'zip' && strlen((string)$value) > 5) {
+          $valid_request = false;
+          $response['zip_length_error'] = "The Zip Code field only allows 5 digits.";
         }
       }
       // iteragte through the required fields, check if the input keys are in the required fields
       foreach ($required_fields as $req_field) {
-        error_log('field: '.$req_field);
+        //error_log('field: '.$req_field);
         if(!in_array($req_field,$input_keys)) {
           $valid_request=false;
           array_push($missing_fields,$req_field);
@@ -61,7 +63,7 @@ class addressController extends Controller
           $response['missing_field_error'] = "The following fields are required, but not provided: ". implode(",",$missing_fields);
         }
       }
-      error_log(implode(",",$response));
+      // return the response array
       return $response;
     }
     /**
@@ -84,27 +86,35 @@ class addressController extends Controller
      */
     public function store(Request $request)
     {
-      error_log('---------');
+      //error_log('---------');
+      // get all the request parameters
       $input = $request->all();
-      $validate_result = $this->validate_input($input);
-      if (!array_search('result',$validate_result)){
+      // validate the input parameters
+      $validate_array = $this->validate_input($input);
+      // iterate through the validation response
+      foreach ($validate_array as $item => $value) {
+        //error_log("item: ".$item." value: ".$value);
+        // get the result value
+        if ($item == "result") {
+          $result=$value;
+        }
+      }
+      //error_log("result: ". $result);
+      // if it's not a success, return the error
+      if ($result != "success"){
         $messages = array();
-        foreach ($validate_result as $item => $message) {
+        foreach ($validate_array as $item => $message) {
           if (strpos($item, '_error') !== false) {
             error_log("key: ".$message);
             array_push($messages,$message);
           }
-          // if ($item == "error_message") {
-          //   error_log("key: ".$message);
-          //   array_push($messages,$message);
-          // }
         }
+        // return the error to the user
         return response()->json(['status'=>'error','message'=>"There were errors processing this request",'data'=>$messages],422);
       }
 
       // create the new address using the supplied parameters
       try {
-        // TODO check for blank/null parameters
         $address = new addressModel;
         $address->address_line_1=$request->address_line_1;
         $address->address_line_2=$request->address_line_2;
@@ -150,9 +160,35 @@ class addressController extends Controller
      */
     public function update(Request $request, $id)
     {
-      // create the new address using the supplied parameters
+
+      // get all the request parameters
+      $input = $request->all();
+      // validate the input parameters
+      $validate_array = $this->validate_input($input);
+      // iterate through the validation response
+      foreach ($validate_array as $item => $value) {
+        //error_log("item: ".$item." value: ".$value);
+        // get the result value
+        if ($item == "result") {
+          $result=$value;
+        }
+      }
+      //error_log("result: ". $result);
+      // if it's not a success, return the error
+      if ($result != "success"){
+        $messages = array();
+        foreach ($validate_array as $item => $message) {
+          if (strpos($item, '_error') !== false) {
+            error_log("key: ".$message);
+            array_push($messages,$message);
+          }
+        }
+        // return the error to the user
+        return response()->json(['status'=>'error','message'=>"There were errors processing this request",'data'=>$messages],422);
+      }
+
+      // update the address using the supplied parameters
       try {
-        // TODO check for blank/null parameters
         $address = addressModel::find($id);
         $address->address_line_1=$request->address_line_1;
         $address->address_line_2=$request->address_line_2;
