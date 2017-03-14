@@ -9,4 +9,9 @@ class classtypeModel extends Model
     //
     protected $table = 'class_types';
     protected $primaryKey = 'class_type_id';
+
+    // class types
+    // pre-k
+    // toddlers
+    // etc...
 }
