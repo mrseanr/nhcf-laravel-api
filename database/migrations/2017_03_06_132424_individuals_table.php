@@ -27,7 +27,7 @@ class IndividualsTable extends Migration
               $table->date('birthday');
               $table->char('gender', 1);
               $table->string('known_allergies')->nullable();
-              $table->string('notes')->nullable;
+              $table->string('notes')->nullable();
               $table->timestamps();
           });
         }

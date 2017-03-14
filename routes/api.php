@@ -22,3 +22,4 @@ Route::resource('address','addressController',['except' => ['create', 'edit']]);
 Route::resource('role','roleController',['except' => ['create', 'edit']]);
 Route::resource('class_type','classtypeController',['except' => ['create', 'edit']]);
 Route::resource('class','classController',['except' => ['create', 'edit']]);
+Route::resource('individual','individualController',['except' => ['create', 'edit']]);
