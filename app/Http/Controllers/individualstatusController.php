@@ -61,7 +61,9 @@ class individualstatusController extends Controller
      */
     public function index()
     {
-        //
+        // return all individual statuses
+        $individual_statuses = individualstatusModel::all();
+        return response()->json(['status'=>'success','data'=>[$individual_statuses]],200);
     }
 
     /**
@@ -211,7 +213,7 @@ class individualstatusController extends Controller
         try {
           $individual_status = individualstatusModel::findOrFail($id);
           $individual_status->delete();
-          return response()->json(['status'=>'success','message'=>'The role '.$individual_status->status_name.' was removed successfully.'],200);
+          return response()->json(['status'=>'success','message'=>'The individual status '.$individual_status->status_name.' was removed successfully.'],200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
           return response()->json(['status'=>'error','message'=>'No resource found to delete.'],404);
         } catch (\Exception $e) {
