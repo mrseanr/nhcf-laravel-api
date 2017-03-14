@@ -64,7 +64,7 @@ class roleController extends Controller
     {
       // return all roles
       $roles = roleModel::all();
-      return response()->json(['status'=>'success','data'=>[$roles]]);
+      return response()->json(['status'=>'success','data'=>[$roles]],200);
     }
 
     /**
@@ -116,12 +116,12 @@ class roleController extends Controller
         $role->active=$active;
         $role->save();
         $inserted_id = $role->role_id;
-        return response()->json(['status'=>'success','data'=>[$role]]);
+        return response()->json(['status'=>'success','data'=>[$role]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }
     }
 
@@ -136,11 +136,11 @@ class roleController extends Controller
       // return the role details by id
       try {
         $role = roleModel::findOrFail($id);
-        return response()->json(['status'=>'success','data'=>[$role]]);
+        return response()->json(['status'=>'success','data'=>[$role]],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 
@@ -193,12 +193,12 @@ class roleController extends Controller
         $role->notes=$request->notes;
         $role->active=$active;
         $role->save();
-        return response()->json(['status'=>'success','data'=>[$role]]);
+        return response()->json(['status'=>'success','data'=>[$role]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }
     }
 
@@ -214,11 +214,11 @@ class roleController extends Controller
       try {
         $role = roleModel::findOrFail($id);
         $role->delete();
-        return response()->json(['status'=>'success','message'=>'The role '.$role->name.' was removed successfully.']);
+        return response()->json(['status'=>'success','message'=>'The role '.$role->name.' was removed successfully.'],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found to delete.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 }

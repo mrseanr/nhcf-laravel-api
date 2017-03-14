@@ -75,7 +75,7 @@ class addressController extends Controller
     {
       // return all addresses
       $addresses = addressModel::all();
-      return response()->json(['status'=>'success','data'=>[$addresses]]);
+      return response()->json(['status'=>'success','data'=>[$addresses]],200);
     }
 
     /**
@@ -124,12 +124,12 @@ class addressController extends Controller
         $address->notes=$request->notes;
         $address->save();
         $inserted_id = $address->address_id;
-        return response()->json(['status'=>'success','data'=>[$address]]);
+        return response()->json(['status'=>'success','data'=>[$address]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }
     }
 
@@ -144,11 +144,11 @@ class addressController extends Controller
       // return the address details by id
       try {
         $address = addressModel::findOrFail($id);
-        return response()->json(['status'=>'success','data'=>[$address]]);
+        return response()->json(['status'=>'success','data'=>[$address]],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 
@@ -198,14 +198,14 @@ class addressController extends Controller
         $address->zip=$request->zip;
         $address->notes=$request->notes;
         $address->save();
-        return response()->json(['status'=>'success','data'=>[$address]]);
+        return response()->json(['status'=>'success','data'=>[$address]],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found.'],404);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }    }
 
     /**
@@ -220,11 +220,11 @@ class addressController extends Controller
       try {
         $address = addressModel::findOrFail($id);
         $address->delete();
-        return response()->json(['status'=>'success','message'=>$address->address_line_1.','.$address->city.' was removed successfully.']);
+        return response()->json(['status'=>'success','message'=>$address->address_line_1.','.$address->city.' was removed successfully.'],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found to delete.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 }

@@ -63,7 +63,7 @@ class classtypeController extends Controller
     {
       // return all class types
       $class_types = classtypeModel::all();
-      return response()->json(['status'=>'success','data'=>[$class_types]]);
+      return response()->json(['status'=>'success','data'=>[$class_types]],200);
     }
 
     /**
@@ -115,12 +115,12 @@ class classtypeController extends Controller
         $class_type->active=$active;
         $class_type->save();
         $inserted_id = $class_type->class_type_id;
-        return response()->json(['status'=>'success','data'=>[$class_type]]);
+        return response()->json(['status'=>'success','data'=>[$class_type]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }
     }
 
@@ -135,11 +135,11 @@ class classtypeController extends Controller
       // return the class type details by id
       try {
         $class_type = classtypeModel::findOrFail($id);
-        return response()->json(['status'=>'success','data'=>[$class_type]]);
+        return response()->json(['status'=>'success','data'=>[$class_type]],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 
@@ -192,12 +192,12 @@ class classtypeController extends Controller
         $class_type->notes=$request->notes;
         $class_type->active=$active;
         $class_type->save();
-        return response()->json(['status'=>'success','data'=>[$class_type]]);
+        return response()->json(['status'=>'success','data'=>[$class_type]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       }
     }
 
@@ -213,11 +213,11 @@ class classtypeController extends Controller
       try {
         $class_type = classtypeModel::findOrFail($id);
         $class_type->delete();
-        return response()->json(['status'=>'success','message'=>'The class type '.$class_type->name.' was removed successfully.']);
+        return response()->json(['status'=>'success','message'=>'The class type '.$class_type->name.' was removed successfully.'],200);
       } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
         return response()->json(['status'=>'error','message'=>'No resource found to delete.'],404);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 }

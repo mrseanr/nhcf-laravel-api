@@ -59,7 +59,7 @@ class churchController extends Controller
     {
         // return all churches
         $churches = churchModel::all();
-        return response()->json(['status'=>'success','data'=>[$churches]]);
+        return response()->json(['status'=>'success','data'=>[$churches]],200);
     }
 
     /**
@@ -115,12 +115,12 @@ class churchController extends Controller
           $church->notes = $request->notes;
           $church->save();
           $inserted_id = $church->church_id;
-          return response()->json(['status'=>'success','data'=>[$church]]);
+          return response()->json(['status'=>'success','data'=>[$church]],200);
         } catch (\Illuminate\Database\QueryException $exception) {
           // use php errorInfo class to get the exception
           $errorInfo = $exception->errorInfo;
           // return the response to the client
-          return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+          return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
         }
     }
 
@@ -135,9 +135,9 @@ class churchController extends Controller
         // return the church details by id
         try {
           $church = churchModel::findOrFail($id);
-          return response()->json(['status'=>'success','data'=>[$church]]);
+          return response()->json(['status'=>'success','data'=>[$church]],200);
         } catch (\Exception $e) {
-          return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+          return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
         }
     }
 
@@ -183,14 +183,14 @@ class churchController extends Controller
         $church->address_id = $request->address_id;
         $church->notes = $request->notes;
         $church->save();
-        return response()->json(['status'=>'success','data'=>[$church]]);
+        return response()->json(['status'=>'success','data'=>[$church]],200);
       } catch (\Illuminate\Database\QueryException $exception) {
         // use php errorInfo class to get the exception
         $errorInfo = $exception->errorInfo;
         // return the response to the client
-        return response()->json(['status'=>'error','message'=>$errorInfo[2]]);
+        return response()->json(['status'=>'error','message'=>$errorInfo[2]],500);
       } catch (\Exception $e) {
-        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+        return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
       }
     }
 
@@ -206,9 +206,9 @@ class churchController extends Controller
         try {
           $church = churchModel::findOrFail($id);
           $church->delete();
-          return response()->json(['status'=>'success','message'=>$church->church_name.' was removed successfully.']);
+          return response()->json(['status'=>'success','message'=>$church->church_name.' was removed successfully.'],200);
         } catch (\Exception $e) {
-          return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()]);
+          return response()->json(['status'=>'error','message'=>$e->getMessage(),'error_code'=>$e->getCode()],500);
         }
     }
 }
