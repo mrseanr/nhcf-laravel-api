@@ -24,6 +24,11 @@ class churchController extends Controller
       foreach ($input as $key => $value) {
         //error_log('key: '.$key.' value: '.$value);
         array_push($input_keys, $key);
+        // check the teacher_id value is numeric
+        if ($key == 'address_id' && !is_numeric($value)) {
+          $valid_request = false;
+          $response['address_id_numeric_error'] = "The Address ID field must be numeric.";
+        }
       }
       // iteragte through the required fields, check if the input keys are in the required fields
       foreach ($required_fields as $req_field) {
